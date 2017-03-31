@@ -1,0 +1,8 @@
+{
+  "name": "manifest-proxy",
+  "author": "Loke Dupont <lodu@blockbuster.dk>",
+  "dependencies": {
+    "libxmljs": "^0.18.4"
+  },
+  "license": "MIT"
+}
