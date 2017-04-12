@@ -25,7 +25,7 @@ fs.readFile('/dev/stdin', function (err, data) {
                 streamIndexes[i].find('.//QualityLevel')[1].remove();
                 streamIndexes[i].attr('QualityLevels').value("1");
 
-                // Remove the first qualitylevel from orignal, set index to 0 and set QualityLevels 1
+                // Remove the first qualitylevel from clone, set index to 0 and set QualityLevels 1
                 levels = cloned_node.find('.//QualityLevel');
                 levels[1].attr('Index').value("0");
                 levels[0].remove();
@@ -34,14 +34,30 @@ fs.readFile('/dev/stdin', function (err, data) {
                 // Fix name of cloned node
                 cloned_node.attr('Name').value(cloned_node.attr('Name').value() + "_1")
 
-                // Add cloned element after current
+                // Add cloned element after current if channel == 2
+                //levels = cloned_node.find('.//QualityLevel');
+                //if (levels[0].attr('Channels')==="1"||levels[0].attr('Channels')==="2") {
+                //    streamIndexes[i].addNextSibling(cloned_node);
+                //}
+
+                // Always add cloned element
+                levels = cloned_node.find('.//QualityLevel');
                 streamIndexes[i].addNextSibling(cloned_node);
+            }
+        }
+        else if (streamIndexes[i].attr('Type').value() === "video") {
+            // Strip any bitrate over 5mbit
+            levels = streamIndexes[i].find('.//QualityLevel');
+            for (var x = 0, xlen = levels.length; x < xlen; x++) {
+                if (parseInt(levels[x].attr('Bitrate').value()) > 5000000) {
+                    levels[x].remove();
+                }
             }
         }
     }
 
     // Enable paragraph below to strip f tags
-    /*felements = xmlDoc.find('//f');
+    felements = xmlDoc.find('//f');
     for (var i = 0, len = felements.length; i < len; i++) {
         felements[i].remove()
     }/**/
